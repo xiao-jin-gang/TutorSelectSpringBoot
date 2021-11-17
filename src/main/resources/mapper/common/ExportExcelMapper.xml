@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nwu.mapper.admin.ExportExcelMapper">
+
+    <select id="selectByQuery" resultType="com.nwu.vo.QueryDepartmentSecretaryInit"
+            parameterType="com.nwu.vo.TutorQuery">
+        SELECT
+        t.*,
+        a2.apply_name as applyName,
+        a.status,
+        a.apply_type_id,
+        a.commit,
+        s.inspect_describe as inspectDescribe,
+        o.organization_name as organizationName
+        FROM `tutor_inspect` t,`apply` a, `organization` o, `status_code` s,`apply_type` a2
+        WHERE
+        a.apply_id = t.apply_id
+        AND a.status = s.code_id
+        AND t.organization_id = o.organization_id
+        AND a.apply_type_id = a2.apply_type_id
+        <if test="userId !=null and userId.length >0 ">
+            AND a.tutor_id = #{userId}
+        </if>
+        <if test="applyType !=0 ">
+            AND a.apply_type_id = #{applyType}
+        </if>
+
+        <if test="applyStatuss !=null and applyStatuss.size() >0">
+            AND a.status in
+            <foreach item="status" collection="applyStatuss" open="(" separator="," close=")">
+            ${status}
+            </foreach>
+        </if>
+        <if test="subjectType !=null and subjectType.length >0">
+            AND a.subject = #{subjectType}
+        </if>
+        <if test="organization !=null  >0">
+            AND t.organization_id = #{organization}
+        </if>
+        <if test="userName !=null and userName.length >0">
+            AND t.name = #{userName}
+        </if>
+        <if test="subjectName !=null and subjectName.length >0">
+            AND t.applied_subject_code = #{subjectName}
+        </if>
+    </select>
+
+</mapper>

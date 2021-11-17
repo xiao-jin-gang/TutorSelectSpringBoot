@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nwu.mapper.TutorNoInspectMapper">
+
+    <select id="getSecondPage" parameterType="int" resultType="com.nwu.entities.tutor.NoSecondPage">
+            SELECT a.apply_id,
+                   subject           as applySubject,
+                   research_directions,
+                   applied_subject_unit,
+                   applied_subject_code,
+                   applied_subject_name,
+                   professional_application_subject_unit,
+                   professional_application_subject_code,
+                   professional_application_subject_name,
+                   professional_field_code,
+                   professional_field_name,
+                   exemption_conditions,
+                   exemption_conditions_materials,
+                   teaching_awards   as teachingAwardsJson,
+                   research_projects as researchProjectsJson,
+                   master_director_time,
+                   master_director_subject
+        FROM apply a
+                 LEFT JOIN tutor_no_inspect t ON a.apply_id = t.apply_id
+        WHERE a.apply_id = #{applyId}
+    </select>
+
+    <select id="getNoFirstPage" parameterType="int" resultType="com.nwu.entities.tutor.FirstPage">
+        SELECT apply_id,
+               tutor_id,
+               name,
+               organization_id,
+               gender,
+               birthday,
+               image, identity, phone, email, final_degree,
+            awarding_unit_time, final_degree, evaluate_time, title
+        FROM tutor_no_inspect
+        WHERE apply_id=#{applyId}
+    </select>
+
+    <insert id="saveTutorNoInspectFirstPage" parameterType="com.nwu.entities.tutor.FirstPage">
+        INSERT INTO tutor_no_inspect
+        (apply_id, tutor_id, `name`, gender, organization_id, image, birthday, identity, phone, email, title,
+         evaluate_time,
+         final_degree, awarding_unit_time)
+        VALUES (#{noFirstPage.applyId}, #{noFirstPage.tutorId}, #{noFirstPage.name}, #{noFirstPage.gender},
+                #{noFirstPage.organizationId}, #{noFirstPage.image},
+                #{noFirstPage.birthday}, #{noFirstPage.identity}, #{noFirstPage.phone}, #{noFirstPage.email},
+                #{noFirstPage.title},
+                #{noFirstPage.evaluateTime}, #{noFirstPage.finalDegree}, #{noFirstPage.awardingUnitTime})
+    </insert>
+
+    <update id="updateTutorNoInspectSecondPage">
+        UPDATE tutor_no_inspect
+        SET research_directions                   = #{noSecondPage.researchDirections},
+            applied_subject_unit                  = #{noSecondPage.appliedSubjectUnit},
+            applied_subject_code                  = #{noSecondPage.appliedSubjectCode},
+            applied_subject_name                  = #{noSecondPage.appliedSubjectName},
+            exemption_conditions                  = #{noSecondPage.exemptionConditions},
+            teaching_awards                       = #{noSecondPage.teachingAwardsJson},
+            master_director_time                  = #{noSecondPage.masterDirectorTime},
+            master_director_subject               = #{noSecondPage.masterDirectorSubject},
+            exemption_conditions_materials        = #{noSecondPage.exemptionConditionsMaterials},
+            research_projects                     = #{noSecondPage.researchProjectsJson},
+            professional_application_subject_unit = #{noSecondPage.professionalApplicationSubjectUnit},
+            professional_application_subject_code = #{noSecondPage.professionalApplicationSubjectCode},
+            professional_application_subject_name = #{noSecondPage.professionalApplicationSubjectName},
+            professional_field_code               = #{noSecondPage.professionalFieldCode},
+            professional_field_name               = #{noSecondPage.professionalFieldName}
+        WHERE apply_id = #{applyId}
+    </update>
+
+    <insert id="saveNoApplyInfo" useGeneratedKeys="true" keyColumn="apply_id" keyProperty="applyId"
+            parameterType="com.nwu.entities.Apply">
+        INSERT INTO apply (tutor_id, name, organization_id, apply_type_id, status, submit_time)
+        VALUES (#{apply.tutorId}, #{apply.name}, #{apply.organizationId}, #{apply.applyTypeId}, #{apply.status},
+                #{apply.submitTime});
+    </insert>
+
+    <update id="updateApplySubjectStatusTimeByApplyId">
+        UPDATE apply
+        SET subject    = #{applySubject},
+            status     = #{status},
+            submit_time= #{submitTime}
+        WHERE apply_id = #{applyId}
+    </update>
+
+    <select id="getPdfTutorNoInspect" parameterType="string" resultType="com.nwu.entities.PdfEntity.PdfNoTutorInspect">
+        SELECT t.apply_id,
+               t.tutor_id,
+               t.`name`,
+               t.birthday,
+               o.organization_name,
+               t.gender,
+               t.birthday,
+               t.image,
+               t.identity,
+               t.phone,
+               t.email,
+               t.final_degree,
+               t.awarding_unit_time,
+               t.title,
+               t.evaluate_time,
+               t.research_directions,
+               t.applied_subject_unit,
+               t.applied_subject_code,
+               t.applied_subject_name,
+               t.exemption_conditions,
+               t.master_director_time,
+               t.master_director_subject,
+               t.teaching_awards,
+               t.research_projects,
+               t.professional_application_subject_unit,
+               t.professional_application_subject_code,
+               t.professional_application_subject_name,
+               t.professional_field_code,
+               t.professional_field_name
+
+        FROM tutor_no_inspect t
+                 LEFT JOIN organization o ON t.organization_id = o.organization_id
+        WHERE t.apply_id = #{applyId}
+    </select>
+
+    <update id="updateNoFirstPage">
+        UPDATE tutor_no_inspect
+        SET phone              = #{phone},
+            email              = #{email},
+            awarding_unit_time = #{awardingUnitTime},
+            evaluate_time      = #{evaluateTime}
+        WHERE apply_id = #{applyId}
+    </update>
+
+    <update id="updateTutorNoInspectFilePath">
+        UPDATE tutor_no_inspect
+        SET exemption_conditions_materials = #{exemptionConditionsMaterials}
+        WHERE apply_id = #{applyId}
+    </update>
+</mapper>

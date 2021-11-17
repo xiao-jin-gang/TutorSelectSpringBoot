@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nwu.mapper.tutor.common.TutorApplyMapper">
+
+    <select id="getApplyByTutorId" parameterType="string" resultType="integer">
+        SELECT COUNT(*)
+        FROM apply
+        WHERE tutor_id = #{tutorId};
+    </select>
+
+    <select id="getApplyByTutorIdAndApplyTypeId" resultType="com.nwu.entities.Apply">
+        SELECT *
+        FROM apply
+        WHERE tutor_id = #{tutorId}
+          AND apply_type_id = #{applyTypeId}
+    </select>
+
+    <select id="getApplyByTutorIdAndApplyTypeIdAndStatus" resultType="com.nwu.entities.Apply">
+        SELECT *
+        FROM apply
+        WHERE tutor_id = #{tutorId}
+          AND apply_type_id = #{applyTypeId}
+          AND status = 0;
+    </select>
+
+    <select id="getApplyListByTutorIdAndApplyTypeId" resultType="com.nwu.entities.Apply">
+        SELECT *
+        FROM apply
+        WHERE tutor_id = #{tutorId}
+          AND apply_type_id = #{applyTypeId}
+          AND status = #{status};
+    </select>
+
+    <insert id="saveApplyInfo" useGeneratedKeys="true" keyColumn="apply_id" keyProperty="applyId"
+            parameterType="com.nwu.entities.Apply">
+        INSERT INTO apply (tutor_id, name, organization_id, apply_type_id, status, submit_time)
+        VALUES (#{apply.tutorId}, #{apply.name}, #{apply.organizationId}, #{apply.applyTypeId}, #{apply.status}, #{apply.submitTime});
+    </insert>
+
+    <update id="updateApplySubject">
+        UPDATE apply
+        SET subject = #{applySubject}
+        WHERE apply_id = #{applyId}
+    </update>
+
+    <select id="getApplyId" resultType="int">
+        SELECT apply_id
+        FROM apply
+        WHERE tutor_id = #{tutorId}
+          AND apply_type_id = #{applyTypeId}
+          AND status = #{status};
+    </select>
+
+    <select id="getApplyIdByTutorIdAndStatus" resultType="int">
+        SELECT apply_id
+        FROM apply
+        WHERE tutor_id = #{tutorId}
+          AND status = #{status};
+    </select>
+</mapper>

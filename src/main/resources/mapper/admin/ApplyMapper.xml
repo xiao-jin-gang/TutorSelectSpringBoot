@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nwu.mapper.admin.ApplyMapper">
+
+    <update id="updateApplyStatusAndCommit" parameterType="com.nwu.vo.UpdateStatus">
+        update apply
+        <set>
+                status = #{status}
+            <if test="commit != null and commit !='' ">
+                , commit = #{commit}
+            </if>
+
+        </set>
+        where
+        apply_id = #{applyId}
+    </update>
+    <update id="updateApplyStatusAndCommitSfh" parameterType="com.nwu.vo.UpdateStatus">
+        update apply
+        <set>
+            <if test="status != null and status != '' ">
+                status = #{status},
+            </if>
+            <if test="commit != null and commit !='' ">
+                commit_yx_sfh = #{commit}
+            </if>
+
+        </set>
+        where
+        apply_id = #{applyId}
+    </update>
+    <update id="updateApplyStatusAndCommitXy" parameterType="com.nwu.vo.UpdateStatus">
+        update apply
+        <set>
+            <if test="status != null and status != '' ">
+                status = #{status},
+            </if>
+            <if test="commit != null and commit !='' ">
+                commit_yx_xy = #{commit}
+            </if>
+
+        </set>
+        where
+        apply_id = #{applyId}
+    </update>
+
+    <update id="updateApplyStatusAndTime">
+        update apply
+        set status      = #{status},
+            submit_time = #{time}
+        where apply_id = #{applyId}
+    </update>
+    <update id="updateApply399to39">
+        update apply
+        set status      = 62 where status = 399
+    </update>
+    <update id="updateApply388to38">
+        update apply
+        set status      = 61 where status = 388
+    </update>
+    <!--  社科处更新操作  -->
+    <update id="updateSocialApplyStatusAndCommit" parameterType="com.nwu.vo.UpdateStatus">
+        update apply
+        <set>
+            status = #{status}
+            <if test="commit != null and commit !='' ">
+                , commit_social = #{commit}
+            </if>
+
+        </set>
+        where
+        apply_id = #{applyId}
+    </update>
+
+    <select id="getInspectApply" resultType="com.nwu.vo.ApplyDisplayVo">
+        SELECT a.apply_id,
+               a.tutor_id,
+               a.apply_type_id,
+               a.status,
+               apt.apply_name,
+               sc.status_display,
+               a.commit_yjsy_cs as commitGraduate,
+               a.commit_social,
+               a.commit,
+               t.doctoral_master_application_subject_unit,
+               t.doctoral_master_subject_code,
+               t.doctoral_master_subject_name,
+               t.professional_application_subject_unit,
+               t.professional_application_subject_code,
+               t.professional_application_subject_name,
+               t.professional_field_code,
+               t.professional_field_name
+        FROM tutor_inspect t
+                 LEFT JOIN apply a ON a.apply_id = t.apply_id
+                 LEFT JOIN apply_type apt ON a.apply_type_id = apt.apply_type_id
+                 LEFT JOIN status_code sc ON a.status = sc.code_id
+        WHERE a.tutor_id = #{tutorId}
+    </select>
+
+    <select id="getNoInspectApply" resultType="com.nwu.vo.ApplyDisplayVo">
+        SELECT a.apply_id,
+               a.tutor_id,
+               a.apply_type_id,
+               a.status,
+               apt.apply_name,
+               sc.status_display,
+               a.commit_yjsy_cs as commitGraduate,
+               a.commit_social,
+               a.commit,
+               t.applied_subject_unit,
+               t.applied_subject_code,
+               t.applied_subject_name,
+               t.professional_application_subject_unit,
+               t.professional_application_subject_code,
+               t.professional_application_subject_name,
+               t.professional_field_code,
+               t.professional_field_name
+        FROM tutor_no_inspect t
+                 LEFT JOIN apply a ON a.apply_id = t.apply_id
+                 LEFT JOIN apply_type apt ON a.apply_type_id = apt.apply_type_id
+                 LEFT JOIN status_code sc ON a.status = sc.code_id
+        WHERE a.tutor_id = #{tutorId}
+    </select>
+</mapper>

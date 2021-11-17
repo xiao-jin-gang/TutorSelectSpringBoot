@@ -1,0 +1,35 @@
+
+spring:
+  datasource:
+    url: jdbc:mysql://xit.nwu.edu.cn:3306/tutor_select?serverTimezong=UTC
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: wwwsql240
+
+
+  # 配置上传文件大小
+  servlet:
+    multipart:
+      max-file-size: 500MB      # 最大文件限制
+      max-request-size: 500MB   # 单次请求最大文件限制
+
+# mybatis 信息
+mybatis:
+  # 加载 Mybatis 映射文件
+  mapper-locations: classpath:mapper/**/*Mapper.xml
+  # 配置 pojo 别名
+  type-aliases-package: com.nwu.entities
+  # 配置下划线自动转驼峰命名
+  configuration:
+    map-underscore-to-camel-case: true
+
+server:
+  port: 8081
+logging:
+  level:
+    com.nwu.mapper: debug
+
+#配置方言
+pagehelper:
+  helper-dialect: mysql
+

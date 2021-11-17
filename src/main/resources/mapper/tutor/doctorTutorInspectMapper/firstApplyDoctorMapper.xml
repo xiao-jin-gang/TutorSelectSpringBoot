@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.nwu.mapper.tutor.doctorTutorInspect.FirstApplyDoctorMapper">
+
+</mapper>
+
+        <!--<?xml version="1.0" encoding="UTF-8"?>-->
+        <!--<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">-->
+        <!--<mapper namespace="com.nwu.mapper.testMapper">-->
+        <!--    <insert id="SaveBaseInfo" parameterType="com.nwu.entities.TutorInspect">-->
+        <!--        INSERT INTO tutor_inspect-->
+        <!--        (tutor_id,number,`name`,organization_id,gender,birthday,image,identity,phone,email,final_degree,awarding_unit_time,title,evaluate_time)-->
+        <!--        VALUES-->
+        <!--        ()-->
+        <!--    </insert>-->
+        <!--</mapper>-->
